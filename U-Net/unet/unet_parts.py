@@ -6,8 +6,9 @@ import torch.nn.functional as F
 #从UNet网络中可以看出，不管是下采样过程还是上采样过程，每一层都会连续进行两次卷积操作，
 #这种操作在UNet网络中重复很多次，可以单独写一个DoubleConv模块
 class DoubleConv(nn.Module):
+
     #(convolution => [BN] => ReLU) * 2
-    def __init__(self, in_channels, out_channels, mid_channels = None):
+    def __init__(self, in_channels, out_channels, mid_channels=None):
         super(DoubleConv, self).__init__()
         if not mid_channels:
             mid_channels = out_channels
@@ -22,11 +23,14 @@ class DoubleConv(nn.Module):
             nn.BatchNorm2d(out_channels),
             nn.ReLU(inplace=True)
         )
+    
     def forward(self, x):
         return self.double_conv(x)
 
 #下采样模块，在U-Net中一共执行4次下采样，就是一个maxpool池化层，进行下采样，然后接一个DoubleConv模块
 class Down(nn.Module):
+
+
     def __init__(self, in_channels, out_channels):
         super(Down, self).__init__()
         self.maxpool_conv = nn.Sequential(
@@ -35,6 +39,7 @@ class Down(nn.Module):
             #Down和DoubleConv类都是Module的子类，所以可以嵌套调用
             DoubleConv(in_channels, out_channels)
         )
+    
     def forward(self, x):
         return self.maxpool_conv(x)
 
