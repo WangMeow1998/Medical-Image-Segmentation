@@ -35,7 +35,7 @@ def train_net(net, device, data_path, epochs=1, batch_size=1, lr=0.00001):
             # 保存loss值最小的网络参数
             if loss < best_loss:
                 best_loss = loss
-                # torch.save(net.state_dict(), 'best_model.pth')
+                torch.save(net.state_dict(), 'best_model.pth')
             # 更新参数
             loss.backward()
             optimizer.step()
